@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Pixabay</string>
+    <string name="no_items">No items</string>
+    <string name="image_details">Image details</string>
+    <string name="number">No.</string>
+    <string name="close">Close</string>
+    <string name="unknown_exception_title">Unknown error</string>
+    <string name="unknown_exception_description">Unknown error occurred. Please try again or restart the app</string>
+    <string name="please_enter_search_query">Please enter search query</string>
+    <string name="search">Search</string>
+    <string name="user">User:</string>
+    <string name="likes">Likes:</string>
+    <string name="downloads">Downloads:</string>
+    <string name="comments">Comments:</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="open_details_screen">Open details screen</string>
+    <string name="open_details_screen_description">Do you want to open image details screen?</string>
+</resources>

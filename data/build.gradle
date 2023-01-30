@@ -1,0 +1,66 @@
+plugins {
+    id 'com.android.library'
+    id "org.jetbrains.kotlin.plugin.serialization"
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+}
+
+android {
+    namespace 'com.psycodeinteractive.pixabay.data'
+    compileSdk compile_sdk_version
+
+    defaultConfig {
+        minSdkVersion min_sdk_version
+        targetSdkVersion target_sdk_version
+    }
+    compileOptions {
+        sourceCompatibility compile_java_version
+        targetCompatibility compile_java_version
+    }
+    kotlinOptions {
+        jvmTarget = compile_jvm_target
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'String', 'PixabayApiKey', PIXABAY_API_KEY
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            buildConfigField 'String', 'PixabayApiKey', PIXABAY_API_KEY
+        }
+    }
+}
+
+dependencies {
+    api project(":domain")
+
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$kotlinx_serialization_retrofit_converter_version"
+
+    implementation("com.squareup.okhttp3:okhttp:$okhttp3_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp3_version")
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    implementation "androidx.paging:paging-common:$androidx_paging_version"
+}

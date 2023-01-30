@@ -1,0 +1,28 @@
+pluginManagement {
+    apply from: 'dependencies.gradle'
+
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    }
+    plugins {
+        id 'org.jetbrains.kotlin.plugin.serialization' version kotlin_version
+        id 'com.android.library' version android_plugin_version
+        id 'org.jetbrains.kotlin.android' version kotlin_version
+        id 'com.google.devtools.ksp' version ksp_version
+        id 'org.jetbrains.kotlin.jvm' version kotlin_version
+        id 'com.android.application' version '7.3.1'
+    }
+}
+buildCache {
+    local {
+        removeUnusedEntriesAfterDays = 1
+    }
+}
+rootProject.name = "Pixabay"
+include ':app'
+include ':presentation'
+include ':data'
+include ':domain'
