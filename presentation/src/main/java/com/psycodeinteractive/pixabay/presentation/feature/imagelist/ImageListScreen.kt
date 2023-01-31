@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -24,9 +23,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.unit.dp
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState.Error
 import androidx.paging.LoadState.Loading
 import androidx.paging.LoadState.NotLoading
@@ -133,19 +131,12 @@ private fun ImageListContent(
     viewModel: ImageListViewModel,
     onImageClick: (id: Int) -> Unit
 ) {
-    val appendLoadState = imageList.loadState.append
-    val refreshLoadState = imageList.loadState.refresh
-    val isLoading = when {
-        refreshLoadState is NotLoading && appendLoadState is NotLoading -> false
-        refreshLoadState is Loading || appendLoadState is Loading -> true
-        appendLoadState is Error || refreshLoadState is Error -> {
-            val error = (appendLoadState as? Error ?: refreshLoadState as? Error)?.error
-            LaunchedEffect(imageList) {
-                viewModel.onError(error?.message.toString())
-            }
-            false
-        } else -> false
-    }
+    var isLoading by remember { mutableStateOf(false) }
+    CheckLoadState(
+        loadState = imageList.loadState,
+        onError = { error -> viewModel.onError(error?.message.toString()) },
+        loading = { loading -> isLoading = loading }
+    )
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -172,7 +163,7 @@ private fun ImageListContent(
                 key = { _, item ->
                     item.id
                 }
-            ) { index, item ->
+            ) { _, item ->
                 ImageListItem(
                     image = item,
                     onClick = onImageClick
@@ -180,6 +171,26 @@ private fun ImageListContent(
             }
         }
     }
+}
+
+@Composable
+private fun CheckLoadState(
+    loadState: CombinedLoadStates,
+    onError: (Throwable?) -> Unit,
+    loading: (Boolean) -> Unit
+) {
+    val appendLoadState = loadState.append
+    val refreshLoadState = loadState.refresh
+    val isLoading = when {
+        refreshLoadState is NotLoading && appendLoadState is NotLoading -> false
+        refreshLoadState is Loading || appendLoadState is Loading -> true
+        refreshLoadState is Error || appendLoadState is Error -> {
+            val error = (appendLoadState as? Error ?: refreshLoadState as? Error)?.error
+            onError(error)
+            false
+        } else -> false
+    }
+    loading(isLoading)
 }
 
 @Composable

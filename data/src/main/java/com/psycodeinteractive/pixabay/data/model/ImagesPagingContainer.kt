@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalPagingApi::class)
-
 package com.psycodeinteractive.pixabay.data.model
 
 import androidx.paging.ExperimentalPagingApi
@@ -17,9 +15,10 @@ data class ImagesPagingContainer(
     val remoteMediator: ImageRemoteMediator,
     private val remoteKeysDao: RemoteKeysDao
 ) {
-    fun imagesPager(query: String) = ImagesPager(
+    @OptIn(ExperimentalPagingApi::class)
+    fun createImagesPager(query: String) = ImagesPager(
         config = config,
-        remoteMediator = remoteMediator,
+        remoteMediator = remoteMediator.apply { this.query = query },
         pagingSourceFactory = {
             remoteKeysDao.remoteKeysByQueryPagingSource(query).apply {
                 remoteMediator.attachPagingSource(this)

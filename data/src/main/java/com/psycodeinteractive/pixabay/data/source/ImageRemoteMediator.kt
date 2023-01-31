@@ -5,7 +5,6 @@ import androidx.paging.LoadType
 import androidx.paging.LoadType.APPEND
 import androidx.paging.LoadType.PREPEND
 import androidx.paging.LoadType.REFRESH
-import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.paging.RemoteMediator.MediatorResult.Error
@@ -49,7 +48,7 @@ class ImageRemoteMediator(
     ): MediatorResult {
         return try {
             val remoteKey = remoteKeysDao.remoteKeysByQuery(query)
-            val previousIds = remoteKey?.ids?.split(",") ?: emptyList()
+            val previousIds = remoteKey?.ids?.split(",").orEmpty()
 
             val loadKey = when (if (queryChanged) REFRESH else loadType) {
                 REFRESH -> 1

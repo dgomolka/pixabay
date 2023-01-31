@@ -18,7 +18,4 @@ interface RemoteKeysDao {
 
     @Query("SELECT ids FROM remote_keys WHERE :query = `query`")
     fun remoteKeysByQueryPagingSource(query: String): PagingSource<Int, String>
-
-    @Query("DELETE FROM remote_keys WHERE :query = 'query'")
-    suspend fun deleteAll(query: String)
 }

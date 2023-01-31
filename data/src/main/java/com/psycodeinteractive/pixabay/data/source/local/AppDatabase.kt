@@ -2,11 +2,9 @@ package com.psycodeinteractive.pixabay.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.psycodeinteractive.pixabay.data.model.local.ImageDatabaseModel
 import com.psycodeinteractive.pixabay.data.model.local.RemoteKeyDatabaseModel
 
-@TypeConverters(DatabaseTypeConverters::class)
 @Database(
     entities = [
         ImageDatabaseModel::class,

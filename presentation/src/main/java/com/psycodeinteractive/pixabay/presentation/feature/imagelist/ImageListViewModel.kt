@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val QUERY_DEBOUNCE_MILLISECONDS = 500L
+
 @HiltViewModel
 class ImageListViewModel @Inject constructor(
     private val getImageListByQueryUseCase: GetImageListByQueryUseCase,
@@ -39,7 +41,7 @@ class ImageListViewModel @Inject constructor(
         viewModelScope.launch {
             searchFlow
                 .filter { it.isNotBlank() }
-                .debounce(500)
+                .debounce(QUERY_DEBOUNCE_MILLISECONDS)
                 .collect {
                     fetchImageList()
                 }
